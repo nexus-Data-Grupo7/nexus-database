@@ -1,0 +1,27 @@
+CREATE DATABASE nexus;
+USE nexus;
+
+CREATE TABLE organizacao (
+id_org INT PRIMARY KEY AUTO_INCREMENT,
+nome_org VARCHAR(100) NOT NULL,
+cnpj VARCHAR(14) UNIQUE NOT NULL,
+email_org VARCHAR(255) UNIQUE NOT NULL,
+senha_hash VARCHAR(255) NOT NULL,
+data_cadastro DATETIME NOT NULL,
+data_ultimo_acesso DATETIME NULL
+);
+
+CREATE TABLE jogador (
+id_jogador INT PRIMARY KEY AUTO_INCREMENT,
+id_riot VARCHAR(100) UNIQUE,
+nickname VARCHAR(50) UNIQUE NOT NULL,
+nome_completo VARCHAR(150) NOT NULL,
+email VARCHAR(255) UNIQUE NOT NULL,
+senha_hash VARCHAR(255) NOT NULL,
+data_cadastro DATETIME NOT NULL,
+data_ultimo_acesso DATETIME NULL
+);
+
+
+SELECT * FROM jogador;
+SELECT * FROM organizacao;

@@ -45,7 +45,7 @@ CREATE TABLE jogador (
         ON DELETE SET NULL,
     CONSTRAINT fk_jogador_regiao FOREIGN KEY (id_regiao)
         REFERENCES regiao (id_regiao),
-    CONSTRAINT uk_riot_handle UNIQUE (game_name , tagline),
+    CONSTRAINT uk_riot_nick UNIQUE (game_name , tagline),
     CONSTRAINT uk_riot_id UNIQUE (id_riot , id_regiao)
 );
 

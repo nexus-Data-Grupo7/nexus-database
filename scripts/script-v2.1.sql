@@ -5,7 +5,7 @@ CREATE TABLE usuario (
     id_usuario INT PRIMARY KEY AUTO_INCREMENT,
     email VARCHAR(255) UNIQUE NOT NULL,
     senha_hash VARCHAR(255) NOT NULL,
-    tipo_usuario ENUM('JOGADOR', 'ORGANIZACAO') NOT NULL,
+    tipo_usuario ENUM('JOGADOR', 'ORGANIZACAO', 'ADMIN') NOT NULL,
     data_cadastro DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
@@ -16,52 +16,76 @@ CREATE TABLE organizacao (
     sigla VARCHAR(10) UNIQUE,
     cnpj VARCHAR(14) UNIQUE NOT NULL,
     CONSTRAINT fk_organizacao_usuario FOREIGN KEY (id_usuario)
-        REFERENCES usuario(id_usuario)
-        ON DELETE CASCADE
+        REFERENCES usuario(id_usuario) ON DELETE CASCADE
 );
 
 CREATE TABLE jogador (
     id_jogador INT PRIMARY KEY AUTO_INCREMENT,
-    id_usuario INT UNIQUE NOT NULL,
-    id_organizacao INT NULL,
+    id_usuario INT UNIQUE NULL,
+    id_organizacao INT NULL, 
     id_regiao INT NOT NULL,
-    id_elo INT NULL,
+    id_elo INT NULL, 
     game_name VARCHAR(50) NOT NULL,
     tagline VARCHAR(10) NOT NULL,
     nome VARCHAR(45) NOT NULL,
     divisao ENUM('I', 'II', 'III', 'IV') NULL,
     pontos_liga INT DEFAULT 0,
     CONSTRAINT fk_jogador_usuario FOREIGN KEY (id_usuario)
-        REFERENCES usuario(id_usuario)
-        ON DELETE CASCADE,
+        REFERENCES usuario(id_usuario) ON DELETE CASCADE,
     CONSTRAINT fk_jogador_organizacao FOREIGN KEY (id_organizacao)
-        REFERENCES organizacao(id_organizacao)
-        ON DELETE SET NULL,
+        REFERENCES organizacao(id_organizacao) ON DELETE SET NULL,
     CONSTRAINT fk_jogador_elo FOREIGN KEY (id_elo)
-        REFERENCES elo (id_elo)
-        ON DELETE SET NULL,
+        REFERENCES elo (id_elo) ON DELETE SET NULL,
     CONSTRAINT fk_jogador_regiao FOREIGN KEY (id_regiao)
         REFERENCES regiao (id_regiao),
     CONSTRAINT uk_riot_nick UNIQUE (game_name, tagline)
 );
 
-CREATE TABLE jogador_estatistica_campeao (
-    id_estatistica INT PRIMARY KEY AUTO_INCREMENT,
+CREATE TABLE partida (
+    id_partida VARCHAR(50) PRIMARY KEY,
+    datahora_inicio DATETIME NOT NULL,
+    duracao_segundos INT NOT NULL,
+    versao_patch VARCHAR(20)
+);
+
+CREATE TABLE desempenho_partida (
+    id_desempenho INT PRIMARY KEY AUTO_INCREMENT,
     id_jogador INT NOT NULL,
+    id_partida VARCHAR(50) NOT NULL,
     id_campeao INT NOT NULL,
     id_funcao INT NOT NULL,
-    total_partidas INT,
-    taxa_vitoria DECIMAL(5,2),
-    kda_medio DECIMAL(4,2),
-    anotacoes TEXT,
-    link_video_destaque VARCHAR(255),
-    CONSTRAINT fk_estatistica_jogador FOREIGN KEY (id_jogador)
-        REFERENCES jogador(id_jogador)
-        ON DELETE CASCADE,
-    CONSTRAINT fk_estatistica_campeao FOREIGN KEY (id_campeao)
+    resultado ENUM('VITORIA', 'DERROTA') NOT NULL,
+    abates INT DEFAULT 0,
+    mortes INT DEFAULT 0,
+    assistencias INT DEFAULT 0,
+    cs_num INT,
+    cs_por_minuto DECIMAL(4,1),
+    runa_principal VARCHAR(50),
+    feiticos VARCHAR(50),
+    CONSTRAINT uk_jogador_partida UNIQUE (id_jogador, id_partida),
+    CONSTRAINT fk_desempenho_jogador FOREIGN KEY (id_jogador)
+        REFERENCES jogador(id_jogador) ON DELETE CASCADE,
+    CONSTRAINT fk_desempenho_partida FOREIGN KEY (id_partida)
+        REFERENCES partida(id_partida) ON DELETE CASCADE,
+    CONSTRAINT fk_desempenho_campeao FOREIGN KEY (id_campeao)
         REFERENCES campeao(id_campeao),
-	CONSTRAINT fk_estatistica_funcao FOREIGN KEY (id_funcao)
+    CONSTRAINT fk_desempenho_funcao FOREIGN KEY (id_funcao)
         REFERENCES funcao(id_funcao)
+);
+
+CREATE TABLE jogador_estatistica (
+    id_estatistica INT PRIMARY KEY AUTO_INCREMENT,
+    id_jogador INT NOT NULL UNIQUE,
+    total_partidas_analisadas INT DEFAULT 0,
+    taxa_vitorias DECIMAL(5, 2) DEFAULT 0,
+    media_kills DECIMAL(4, 1) DEFAULT 0,
+    media_deaths DECIMAL(4, 1) DEFAULT 0,
+    media_assists DECIMAL(4, 1) DEFAULT 0,
+    media_cs DECIMAL(5, 1) DEFAULT 0,
+    duracao_media_minutos DECIMAL(5, 1) DEFAULT 0,
+    ultima_atualizacao DATETIME NOT NULL,
+    CONSTRAINT fk_estatistica_jogador FOREIGN KEY (id_jogador)
+        REFERENCES jogador(id_jogador) ON DELETE CASCADE
 );
 
 CREATE TABLE regiao (

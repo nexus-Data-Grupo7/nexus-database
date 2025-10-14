@@ -1,6 +1,7 @@
 CREATE DATABASE IF NOT EXISTS nexus;
 USE nexus;
 
+-- criar tabela de usuario
 CREATE TABLE organizacao (
     id_organizacao INT PRIMARY KEY AUTO_INCREMENT,
     nome_org VARCHAR(100) NOT NULL,

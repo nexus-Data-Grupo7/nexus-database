@@ -19,6 +19,18 @@ CREATE TABLE organizacao (
         REFERENCES usuario(id_usuario) ON DELETE CASCADE
 );
 
+CREATE TABLE elo (
+    id_elo INT PRIMARY KEY AUTO_INCREMENT,
+    nome_elo VARCHAR(50) UNIQUE NOT NULL,
+    ordem_classificacao INT NOT NULL UNIQUE
+);
+
+CREATE TABLE regiao (
+    id_regiao INT PRIMARY KEY AUTO_INCREMENT,
+    codigo_regiao VARCHAR(10) UNIQUE NOT NULL,
+    nome_regiao VARCHAR(50) NOT NULL
+);
+
 CREATE TABLE jogador (
     id_jogador INT PRIMARY KEY AUTO_INCREMENT,
     id_usuario INT UNIQUE NULL,
@@ -46,6 +58,17 @@ CREATE TABLE partida (
     datahora_inicio DATETIME NOT NULL,
     duracao_segundos INT NOT NULL,
     versao_patch VARCHAR(20)
+);
+
+CREATE TABLE funcao (
+    id_funcao INT PRIMARY KEY AUTO_INCREMENT,
+    nome_funcao VARCHAR(25) UNIQUE NOT NULL
+);
+
+CREATE TABLE campeao (
+    id_campeao INT PRIMARY KEY AUTO_INCREMENT,
+    id_campeao_riot INT UNIQUE NOT NULL,
+    nome_campeao VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE desempenho_partida (
@@ -86,29 +109,6 @@ CREATE TABLE jogador_estatistica (
     ultima_atualizacao DATETIME NOT NULL,
     CONSTRAINT fk_estatistica_jogador FOREIGN KEY (id_jogador)
         REFERENCES jogador(id_jogador) ON DELETE CASCADE
-);
-
-CREATE TABLE regiao (
-    id_regiao INT PRIMARY KEY AUTO_INCREMENT,
-    codigo_regiao VARCHAR(10) UNIQUE NOT NULL,
-    nome_regiao VARCHAR(50) NOT NULL
-);
-
-CREATE TABLE elo (
-    id_elo INT PRIMARY KEY AUTO_INCREMENT,
-    nome_elo VARCHAR(50) UNIQUE NOT NULL,
-    ordem_classificacao INT NOT NULL UNIQUE
-);
-
-CREATE TABLE funcao (
-    id_funcao INT PRIMARY KEY AUTO_INCREMENT,
-    nome_funcao VARCHAR(25) UNIQUE NOT NULL
-);
-
-CREATE TABLE campeao (
-    id_campeao INT PRIMARY KEY AUTO_INCREMENT,
-    id_campeao_riot INT UNIQUE NOT NULL,
-    nome_campeao VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE classe (

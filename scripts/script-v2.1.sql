@@ -39,7 +39,7 @@ CREATE TABLE jogador (
     id_regiao INT NOT NULL,
     id_elo INT NULL,
     game_name VARCHAR(50) NOT NULL,
-    tagline VARCHAR(10) NOT NULL,
+    tagline VARCHAR(10),
     nome VARCHAR(45) NOT NULL,
     divisao ENUM('I', 'II', 'III', 'IV') NULL,
     pontos_liga INT DEFAULT 0,
@@ -58,11 +58,13 @@ CREATE TABLE jogador (
 );
 
 CREATE TABLE partida (
-    id_partida VARCHAR(50) PRIMARY KEY,
-    datahora_inicio DATETIME NOT NULL,
+    id_partida INT PRIMARY KEY AUTO_INCREMENT,
+    datahora_inicio DATETIME,
     duracao_segundos INT NOT NULL,
     versao_patch VARCHAR(20)
 );
+
+select * from desempenho_partida;
 
 CREATE TABLE funcao (
     id_funcao INT PRIMARY KEY AUTO_INCREMENT,
@@ -78,7 +80,7 @@ CREATE TABLE campeao (
 CREATE TABLE desempenho_partida (
     id_desempenho INT PRIMARY KEY AUTO_INCREMENT,
     id_jogador INT NOT NULL,
-    id_partida VARCHAR(50) NOT NULL,
+    id_partida INT NOT NULL,
     id_campeao INT NOT NULL,
     id_funcao INT NOT NULL,
     resultado ENUM('VITORIA', 'DERROTA') NOT NULL,
@@ -337,4 +339,3 @@ INSERT INTO campeao (id_campeao_riot, nome_campeao) VALUES
 (26, 'Zilean'),
 (142, 'Zoe'),
 (143, 'Zyra');
-

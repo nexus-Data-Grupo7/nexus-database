@@ -60,8 +60,7 @@ CREATE TABLE jogador (
 CREATE TABLE partida (
     id_partida INT PRIMARY KEY AUTO_INCREMENT,
     datahora_inicio DATETIME,
-    duracao_segundos INT NOT NULL,
-    versao_patch VARCHAR(20)
+    duracao_segundos INT NOT NULL
 );
 
 CREATE TABLE funcao (
